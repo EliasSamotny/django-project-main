@@ -1,0 +1,132 @@
+GET http://127.0.0.1:8000/api/teachers/1
+
+###
+
+POST http://127.0.0.1:8000/api/lessons/
+Content-Type: application/json
+
+{
+  "subjects": 1, 
+  "topic":"Past Simple Dimple", 
+  "homework": "", 
+  "date": "2022-08-20"
+}
+
+###
+
+PATCH http://127.0.0.1:8000/api/lessons/1/
+Content-Type: application/json
+
+{
+  "topic":"Past Simple Dimple"
+}
+
+###
+
+POST http://127.0.0.1:8000/api/subjects/
+Content-Type: application/json
+
+{
+  "level": "Продвинутый", 
+  "name": "web",
+  "time": "11:45", 
+  "teacher": 1
+}
+
+###
+POST http://127.0.0.1:8000/api/journals/
+Content-Type: application/json
+
+{
+ "students": 1,  
+ "lessons": 55, 
+ "mark": "5"
+}
+
+###
+POST http://127.0.0.1:8000/api/choices/
+Content-Type: application/json
+
+{
+"students": 2, 
+"year": "2021", 
+"semester": "2", 
+"sub_first": 1,
+"sub_second":2, 
+"num_class": "10а"
+}
+
+###
+DELETE http://127.0.0.1:8000/api/students/8/
+
+###
+GET http://127.0.0.1:8000/api/journals/1/
+Content-Type: application/json
+
+{
+    "students": "Михаил",
+    "lessons": "Каташевцев", 
+    "mark": "Викторович",  
+}
+
+###
+POST http://127.0.0.1:8000/api/lessons/1/get-marks/
+Content-Type: application/json
+
+{
+  "students": 1,
+  "lessons": 1, 
+  "mark": "5"
+}
+
+###
+POST http://127.0.0.1:8000/api/schools/
+Content-Type: application/json
+
+{
+  "title": "Гимназия"
+}
+
+
+###
+POST http://127.0.0.1:8000/api/teachers/
+Content-Type: application/json
+
+{
+ "name": "Михаил",  
+ "surname": "Каташевцев", 
+ "patr": "Дмитриевич"
+}
+
+###
+POST http://127.0.0.1:8000/api/teachers/
+Content-Type: application/json
+
+{
+ "name": "Андрей",  
+ "surname": "Дорофеев", 
+ "patr": "Сергеевич"
+}
+
+###
+PUT http://127.0.0.1:8000/api/subjects/1/
+Content-Type: application/json
+
+{
+  "title": "Кря2"
+}
+
+###
+PATCH http://127.0.0.1:8000/api/students/11/
+Content-Type: application/json
+
+{
+  "name": "Андрей",  
+ "patr": "Сергеевич",
+  "surname": "Дорофеев", 
+ "school": 1
+}
+
+
+###
+GET http://127.0.0.1:8000/api/teachers/1/subjects/
