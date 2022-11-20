@@ -22,9 +22,9 @@ function onSurnameClick() {
     class="journal_record"
     :class="{ odd: number % 2 === 1, even: number % 2 === 0 }"
   >
-    <span id = "o0">{{ students_name }}</span>
-    <span id = "o1">{{ lessons_name }}</span>
-    <span id = "o2">{{ mark }}</span>
+    <span>{{ students_name }}</span>
+    <span>{{ lessons_name }}</span>
+    <span>{{ mark }}</span>
   </div>
 </template>
 

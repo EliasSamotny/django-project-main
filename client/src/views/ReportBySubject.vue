@@ -2,9 +2,8 @@
 import { storeToRefs } from "pinia";
 import { useTeacherStore } from "../stores/teacherStore";
 import { computed, onBeforeMount, ref } from "vue";
-
+import xlsx from "json-as-xlsx"
 import { groupByStudent } from "../util/group";
-import Papa from "papaparse";
 const teacherStore = useTeacherStore();
 const { subjects, lessons, subjectStudents, report } =
   storeToRefs(teacherStore);
@@ -35,44 +34,42 @@ import _ from "lodash";
 import { useTeacherStore } from "../stores/teacherStore";
 import { formatDate } from "../util/formatDate";
 
-function downloadCSV(){
-    var jsonData = "[ ";
-    var header = new Array();
-    var currstr = "ФИО\n" + document.getElementById("jour").outerText + '\n';
-    for (var i = 0; i < document.getElementById("head").childElementCount; i++){
+function downloadxlsx(){
+    var jsonData = "[ { \"sheet\": \"Etuds\", \n \"columns\": [\n{ \"label\": \"ФИО\", \"value\": \"user\" },";
+    var header = new Array(); // { label: "User", value: "user" }, // Top level data
+    header.push('user');
+    var currstr = document.getElementById("jour").outerText + '\n';
+    for (var i = 0; i < document.getElementById("head").childElementCount - 1; i++){
       var ind = currstr.indexOf('\n');
-      header.push(currstr.slice(0,ind));
+      header.push('d' + (i + 1).toString(10));
+      
+      jsonData = jsonData + '{ \"label\": \"'+ currstr.slice(0, ind) +'\", \"value\": \"' + header[i + 1] + '\"},'
       currstr = currstr.slice(ind + 1);
     }
-    console.log(currstr);
-    console.log(document.getElementById("jour").childElementCount);
+    jsonData = jsonData.slice(0,jsonData.lastIndexOf(',')) + '],\n\"content\": ['
     for (var i = 1; i < document.getElementById("jour").childElementCount; i++){
-      console.log(document.getElementById("jour").childElementCount);    
       jsonData = jsonData + '{'
       for (var j = 0; j < header.length; j++){        
         var ind = currstr.indexOf('\n');
-        jsonData = jsonData + '\n \"'+ header[j] +'\" : \"' + currstr.slice(0, ind) + '\"';
+        jsonData = jsonData + ' \"' + header[j] + '\" : \"' + currstr.slice(0, ind) + '\"';
         if (j < header.length - 1) jsonData = jsonData + ',';
         currstr = currstr.slice(ind + 1);
         
       }
       jsonData = jsonData + '},'
     }
-    jsonData = jsonData.slice(0,jsonData.lastIndexOf(',')) + ']';
+    jsonData = jsonData.slice(0,jsonData.lastIndexOf(',')) + ']}]';
     console.log(jsonData);
-    var csv = Papa.unparse(jsonData, {	delimiter: ";"});
-    console.log(csv);
-    var blob = new Blob([csv], { type: 'charset=utf-8;data:text/csv;' });
-    console.log(blob);
-    var link = document.createElement("a");
-    var filename = "Отчёт по предмету";//  + selectedSchool;
-    var url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", filename + '.csv');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    
+    let settings = {
+      fileName: "Отчёт по предмету " + document.getElementById("selecsuj").options[document.getElementById("selecsuj").selectedIndex].text, // Name of the resulting spreadsheet
+      extraLength: 3, // A bigger number means that columns will be wider
+      writeMode: 'writeFile', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+      writeOptions: {}, // Style options from https://github.com/SheetJS/sheetjs#writing-options
+      RTL: false, // Display the columns from right-to-left (the default value is false)
+    }
+    let data = JSON.parse(jsonData);
+    xlsx(data, settings)
   }
 
 export default {
@@ -87,6 +84,9 @@ export default {
       this.teacherStore.fetchStudentsBySubjectId(id);
       this.teacherStore.fetchSubjectLessons(id);
     },
+    onClick() {
+      
+    },
   },
 };
 </script>
@@ -94,7 +94,7 @@ export default {
 <template>
   <div class="report_wrapper">
     <h2>Отчёт по предметам</h2>
-    <select v-model="selectedSubject">
+    <select v-model="selectedSubject" id = "selecsuj">
       <option disabled value="">Выберите один из вариантов</option>
       <option v-for="s in subjects" :value="s.id">
         {{ `${s.name} (${s.level})` }}
@@ -102,8 +102,7 @@ export default {
     </select>
     
     <button class = "btn btn-info ms-2" @click="onSelectClick(selectedSubject)">Показать</button>
-    <button class = "btn btn-info ms-2" @click="onSelectClick(downloadCSV())">Скачать отчёт</button>
-    <a href="" id="downloadlink" ref="csvfiledownload" hidden="true" download="mycsv.csv">download</a>
+    <button class = "btn btn-info ms-2" @click="onClick(downloadxlsx())">Скачать отчёт</button>
       <div id = "jour" v-if="!Boolean(lessons) || !Boolean(subjectStudents)">
         Выберите предмет
       </div>
