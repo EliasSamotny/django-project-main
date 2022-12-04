@@ -120,6 +120,7 @@ onBeforeMount(() => {
     flex: 1;
     width: 90%;
     padding: 50px 100px;
+    
 }
 
 .journal_header {
@@ -146,8 +147,8 @@ onBeforeMount(() => {
 .btn {
     padding: 10px 20px;
     border-radius: 8px;
-    background: #42b983;
-
+    color: white;
+    background-color: rgb(5, 33, 84);
     cursor: pointer;
 
     display: flex;
@@ -157,6 +158,10 @@ onBeforeMount(() => {
     text-align: center;
 
     width: fit-content;
+}
+.btn.btn:hover{
+    background-color: rgb(5, 33, 84);
+    color: white;
 }
 
 .btn.save {

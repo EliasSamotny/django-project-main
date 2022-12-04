@@ -111,7 +111,7 @@ async function fetchReports(subjectId) {
       data.content.push(currlist)
     }
   }
-  console.log(JSON.stringify(data))
+  data = [data]
   let ectitle = document.getElementById("selececol").options[document.getElementById("selececol").selectedIndex].text;
   let settings = {
     fileName: "Отчёт для " + ectitle, // Name of the resulting spreadsheet
@@ -120,7 +120,7 @@ async function fetchReports(subjectId) {
     writeOptions: {}, // Style options from https://github.com/SheetJS/sheetjs#writing-options
     RTL: false, // Display the columns from right-to-left (the default value is false)
   }
-  xlsx(JSON.parse('['+JSON.stringify(data)+']'), settings)
+  xlsx(data, settings)
 }
 
 function downloadXLSX() {
@@ -144,15 +144,21 @@ function onSelectClick(id) {
 
 <template>
   <h2>Отчёт по школам</h2>
-  <select v-model="selectedSchool" id='selececol'>
-    <option disabled value="">Выберите один из вариантов</option>
+
+ <div class='cl'>
+ <li> <select v-model="selectedSchool" id='selececol'>
+    <option disabled value="" >Выберите один из вариантов</option>
     <option v-for="s in schools" :value="s.id">
       {{ s.title }}
     </option>
-  </select>
-  <button class="btn btn-info ms-2" @click="onSelectClick(selectedSchool)">Показать</button>
-  <button class="btn btn-info ms-2" @click="downloadXLSX">Скачать отчёт</button>
-
+  </select></li>
+<li><button class="btn btn-info ms-2" @click="onSelectClick(selectedSchool)">Показать</button></li>
+<li> <button class="btn btn-info ms-2" @click="downloadXLSX">Скачать отчёт</button></li>
+</div>
+<div class='cl'>
+  <hr style="border-color:  rgb(255, 255, 255); border-width: 0.5px;  " >
+  <hr style="border-color:  rgb(255, 255, 255); border-width: 0.5px;  " >
+</div>
   <table class="table table-bordered" >
     <thead>
       <th>ФИО</th>
@@ -179,6 +185,8 @@ function onSelectClick(id) {
   display: flex;
   justify-content: flex-start;
   margin-top: 20px;
+  
+ 
 }
 
 .journal_header>span {
@@ -186,9 +194,54 @@ function onSelectClick(id) {
   border: 1px solid black;
   border-right: none;
   padding: 5px;
+  
+  
 }
 
 .journal_header>span:last-child {
   border-right: 1px solid black;
+ 
 }
+.disabledvalue{
+  color: red;
+  background-color: red;
+}
+
+.btn-info{
+color:white;
+background-color: rgb(5, 33, 84 );
+height: 30px;
+width: 170px;
+
+}
+.btn-info:hover{
+  background-color: rgb(129, 168, 240);
+}
+.ul{
+    
+  margin: 700px;
+  height: 50;
+  padding: 200px 3000px;
+  list-style: none ;
+  font-size: 0px;
+  text-align: center;
+  background-color: #fff;
+
+}
+li{
+ 
+  height: 50px;
+  width: 20px;
+  font-size: 20px;
+  position: relative;
+  margin: 1px;
+  padding: 40px;
+}
+
+option{
+  color: rgb(5, 33, 84 );
+
+  background-color: rgb(129, 168, 240);
+}
+
 </style>

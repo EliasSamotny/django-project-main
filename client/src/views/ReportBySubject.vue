@@ -94,18 +94,19 @@ export default {
 <template>
   <div class="report_wrapper">
     <h2>Отчёт по предметам</h2>
-    <select v-model="selectedSubject" id = "selecsuj">
-      <option disabled value="">Выберите один из вариантов</option>
+    <div class='cl'>
+   <li> <select v-model="selectedSubject" id = "selecsuj">
+      <option disabled value="" >Выберите один из вариантов</option>
       <option v-for="s in subjects" :value="s.id">
         {{ `${s.name} (${s.level})` }}
       </option>
     </select>
-    
-    <button class = "btn btn-info ms-2" @click="onSelectClick(selectedSubject)">Показать</button>
-    <button class = "btn btn-info ms-2" @click="onClick(downloadxlsx())">Скачать отчёт</button>
-      <div id = "jour" v-if="!Boolean(lessons) || !Boolean(subjectStudents)">
-        Выберите предмет
-      </div>
+   </li>
+
+   <li> <button class = "btn btn-info ms-2" @click="onSelectClick(selectedSubject)">Показать</button></li>
+  <li><button class = "btn btn-info ms-2" @click="onClick(downloadxlsx())">Скачать отчёт</button></li>
+  </div>
+      <div id = "jour" v-if="!Boolean(lessons) || !Boolean(subjectStudents)"> Выберите предмет</div>
 
       <div id = "jour" v-else>
         <div id = "head" class="journal_header">
@@ -136,7 +137,7 @@ export default {
 .report_wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   align-items: flex-start;
 }
 .journal_header {
@@ -181,6 +182,51 @@ export default {
 }
 
 .journal_row > span:last-child {
-  border-right: 1px solid black;
+  border-right: 1px solid rgb(0, 85, 16);
 }
+
+
+.btn-info{
+  color:white;
+  background-color: rgb(5, 33, 84 );
+  height: 30px;
+  width: 170px;
+  font-size:50;
+  
+  }
+
+  .btn-info:hover{
+    background-color: rgb(129, 168, 240);
+  }
+  .ul{
+      
+    margin: 700px;
+    height: 50;
+    padding: 200px 3000px;
+    list-style: none ;
+    font-size: 0px;
+    text-align: center;
+    background-color: #fff;
+  
+  }
+  li{
+ 
+    height: 50px;
+    width: 20px;
+    font-size: 20px;
+    position: relative;
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  
+  option{
+    color: rgb(5, 33, 84 );
+  
+    background-color: rgb(129, 168, 240);
+  }
+select{
+  width: 300px;
+}
+
 </style>
